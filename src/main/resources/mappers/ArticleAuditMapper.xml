@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ArticleAuditMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.ArticleAudit">
+    <id column="AUDITID" jdbcType="BIGINT" property="auditid" />
+    <result column="RECORD_ID" jdbcType="BIGINT" property="recordId" />
+    <result column="AUDITUSER" jdbcType="NVARCHAR" property="audituser" />
+    <result column="AUDITRESULT" jdbcType="INTEGER" property="auditresult" />
+    <result column="AUDIT_ACTID" jdbcType="BIGINT" property="auditActid" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AUDITNAME" jdbcType="NVARCHAR" property="auditname" />
+    <result column="PUBLISDATE" jdbcType="TIMESTAMP" property="publisdate" />
+    <result column="SORTED" jdbcType="INTEGER" property="sorted" />
+    <result column="CHANNAME" jdbcType="NVARCHAR" property="channame" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    AUDITID, RECORD_ID, AUDITUSER, AUDITRESULT, AUDIT_ACTID, SITE_ID, CREATE_USER, CREATE_TIME, 
+    AUDITNAME, PUBLISDATE, SORTED, CHANNAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_ARICTLE_AUDIT
+    where AUDITID = #{auditid,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByRecordId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_ARICTLE_AUDIT
+    where RECORD_ID = #{newname}
+  </select>
+
+
+  <select id="selectByTitleName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_ARICTLE_AUDIT
+    where AUDITNAME = #{newname}
+  </select>
+
+  <select id="getList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_ARICTLE_AUDIT
+    where 1=1
+    <if test="ImgName != null and ImgName !='' " >
+      and AUDITNAME like '%${ImgName}%'
+    </if>
+    <if test="TitleName != null">
+      and PUBLISDATE >= #{TitleName}
+    </if>
+    <if test="ChanName != null">
+      and #{ChanName} >= PUBLISDATE
+    </if>
+    <if test="username != null and username !='' ">
+      and AUDITUSER =#{username}
+    </if>
+--     ORDER BY CAST(SORTED AS int)
+    ORDER BY SORTED ASC ,PUBLISDATE DESC
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_ARICTLE_AUDIT
+    where AUDITID = #{auditid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.ArticleAudit">
+    insert into T_CMS_ARICTLE_AUDIT (AUDITID, RECORD_ID, AUDITUSER, 
+      AUDITRESULT, AUDIT_ACTID, SITE_ID, 
+      CREATE_USER, CREATE_TIME, AUDITNAME, 
+      PUBLISDATE, SORTED, CHANNAME
+      )
+    values (#{auditid,jdbcType=BIGINT}, #{recordId,jdbcType=BIGINT}, #{audituser,jdbcType=NVARCHAR}, 
+      #{auditresult,jdbcType=INTEGER}, #{auditActid,jdbcType=BIGINT}, #{siteId,jdbcType=BIGINT}, 
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{auditname,jdbcType=NVARCHAR}, 
+      #{publisdate,jdbcType=TIMESTAMP}, #{sorted,jdbcType=INTEGER}, #{channame,jdbcType=NVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.ArticleAudit">
+    insert into T_CMS_ARICTLE_AUDIT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="auditid != null">
+        AUDITID,
+      </if>
+      <if test="recordId != null">
+        RECORD_ID,
+      </if>
+      <if test="audituser != null">
+        AUDITUSER,
+      </if>
+      <if test="auditresult != null">
+        AUDITRESULT,
+      </if>
+      <if test="auditActid != null">
+        AUDIT_ACTID,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="auditname != null">
+        AUDITNAME,
+      </if>
+      <if test="publisdate != null">
+        PUBLISDATE,
+      </if>
+      <if test="sorted != null">
+        SORTED,
+      </if>
+      <if test="channame != null">
+        CHANNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="auditid != null">
+        #{auditid,jdbcType=BIGINT},
+      </if>
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="audituser != null">
+        #{audituser,jdbcType=NVARCHAR},
+      </if>
+      <if test="auditresult != null">
+        #{auditresult,jdbcType=INTEGER},
+      </if>
+      <if test="auditActid != null">
+        #{auditActid,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditname != null">
+        #{auditname,jdbcType=NVARCHAR},
+      </if>
+      <if test="publisdate != null">
+        #{publisdate,jdbcType=DATE},
+      </if>
+      <if test="sorted != null">
+        #{sorted,jdbcType=INTEGER},
+      </if>
+      <if test="channame != null">
+        #{channame,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.ArticleAudit">
+    update T_CMS_ARICTLE_AUDIT
+    <set>
+      <if test="recordId != null">
+        RECORD_ID = #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="audituser != null">
+        AUDITUSER = #{audituser,jdbcType=NVARCHAR},
+      </if>
+      <if test="auditresult != null">
+        AUDITRESULT = #{auditresult,jdbcType=INTEGER},
+      </if>
+      <if test="auditActid != null">
+        AUDIT_ACTID = #{auditActid,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditname != null">
+        AUDITNAME = #{auditname,jdbcType=NVARCHAR},
+      </if>
+      <if test="publisdate != null">
+        PUBLISDATE = #{publisdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sorted != null">
+        SORTED = #{sorted,jdbcType=INTEGER},
+      </if>
+      <if test="channame != null">
+        CHANNAME = #{channame,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where AUDITID = #{auditid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.ArticleAudit">
+    update T_CMS_ARICTLE_AUDIT
+    set RECORD_ID = #{recordId,jdbcType=BIGINT},
+      AUDITUSER = #{audituser,jdbcType=NVARCHAR},
+      AUDITRESULT = #{auditresult,jdbcType=INTEGER},
+      AUDIT_ACTID = #{auditActid,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      AUDITNAME = #{auditname,jdbcType=NVARCHAR},
+      PUBLISDATE = #{publisdate,jdbcType=TIMESTAMP},
+      SORTED = #{sorted,jdbcType=INTEGER},
+      CHANNAME = #{channame,jdbcType=NVARCHAR}
+    where AUDITID = #{auditid,jdbcType=BIGINT}
+  </update>
+</mapper>

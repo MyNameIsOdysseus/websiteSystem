@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ChanMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Chan">
+    <id column="CHAN_ID" jdbcType="BIGINT" property="chanId" />
+    <result column="CHAN_NAME" jdbcType="NVARCHAR" property="chanName" />
+    <result column="BELONG_CHAN" jdbcType="BIGINT" property="belongChan" />
+    <result column="CHAN_TYPE" jdbcType="NVARCHAR" property="chanType" />
+    <result column="CHAN_IMAGE" jdbcType="NVARCHAR" property="chanImage" />
+    <result column="CHAN_BANNER" jdbcType="NVARCHAR" property="chanBanner" />
+    <result column="OPENLINK" jdbcType="INTEGER" property="openlink" />
+    <result column="LINK_ADDRESS" jdbcType="NVARCHAR" property="linkAddress" />
+    <result column="OPEN_TYPE" jdbcType="INTEGER" property="openType" />
+    <result column="SORT_CODE" jdbcType="INTEGER" property="sortCode" />
+    <result column="CHAN_TEMPLATE" jdbcType="BIGINT" property="chanTemplate" />
+    <result column="INFO_TEMPLATE" jdbcType="BIGINT" property="infoTemplate" />
+    <result column="PROCESS_ID" jdbcType="BIGINT" property="processId" />
+    <result column="CHAN_LEVEL_CODE" jdbcType="VARCHAR" property="chanLevelCode" />
+    <result column="CHAN_LEVEL" jdbcType="INTEGER" property="chanLevel" />
+    <result column="CHAN_CODE" jdbcType="NVARCHAR" property="chanCode" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CHAN_STATUS" jdbcType="INTEGER" property="chanStatus" />
+    <result column="CHAN_TEMPLATENAME" jdbcType="NVARCHAR" property="chanTemplatename" />
+    <result column="INFO_TEMPLATENAME" jdbcType="NVARCHAR" property="infoTemplatename" />
+    <result column="BELONG_CHANNAME" jdbcType="NVARCHAR" property="belongChanname" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="net.minggao.cms.model.Chan">
+    <result column="CHEN_DISC" jdbcType="LONGVARCHAR" property="chenDisc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    CHAN_ID, CHAN_NAME, BELONG_CHAN, CHAN_TYPE, CHAN_IMAGE, CHAN_BANNER, OPENLINK, LINK_ADDRESS, 
+    OPEN_TYPE, SORT_CODE, CHAN_TEMPLATE, INFO_TEMPLATE, PROCESS_ID, CHAN_LEVEL_CODE, 
+    CHAN_LEVEL, CHAN_CODE, SITE_ID, CREATE_USER, CREATE_TIME, CHAN_STATUS, CHAN_TEMPLATENAME, 
+    INFO_TEMPLATENAME, BELONG_CHANNAME
+  </sql>
+  <sql id="Blob_Column_List">
+    CHEN_DISC
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where CHAN_ID = #{chanId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByChanLevelCode" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where CHAN_LEVEL_CODE = #{levelCode}
+  </select>
+
+  <select id="selectAll" parameterType="java.lang.Long" resultType="string">
+    select
+    Max(CHAN_LEVEL_CODE)
+    from T_CMS_CHAN
+  </select>
+
+  <select id="getChanList" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    WHERE 1=1
+    <if test="chanName != null">
+      AND CHAN_NAME LIKE '%${chanName}%'
+    </if>
+    <if test="chanType != null">
+      AND CHAN_TYPE = #{chanType}
+    </if>
+    <if test="chanStatus != null">
+      AND CHAN_STATUS = #{chanStatus}
+    </if>
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+  <select id="getMaxNum" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+--     ORDER BY CAST(SORT_CODE AS int)
+    ORDER BY SORT_CODE
+  </select>
+
+  <select id="getChanOrder" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where CHAN_LEVEL='1'
+--     ORDER BY CAST(CHAN_LEVEL_CODE AS bigint)
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+    <select id="getChanOrder1" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from T_CMS_CHAN
+        where CHAN_LEVEL='1'
+--         ORDER BY CAST(SORT_CODE AS int)
+      ORDER BY SORT_CODE
+    </select>
+
+    <select id="getChanOrder2" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from T_CMS_CHAN
+        where CHAN_LEVEL='2'
+--         ORDER BY CAST(SORT_CODE AS int)
+      ORDER BY SORT_CODE
+    </select>
+
+
+    <select id="getChanOrder3" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from T_CMS_CHAN
+        where CHAN_LEVEL='3'
+--         ORDER BY CAST(SORT_CODE AS int)
+      ORDER BY SORT_CODE
+    </select>
+
+
+    <select id="getChanOrder4" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from T_CMS_CHAN
+        where CHAN_LEVEL='4'
+--         ORDER BY CAST(SORT_CODE AS int)
+      ORDER BY SORT_CODE
+    </select>
+
+
+  <select id="getListOrder" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where  CHAN_LEVEL_CODE like '${param}%'
+--     ORDER BY CAST(CHAN_LEVEL_CODE AS bigint)
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+  <select id="selectByBelong" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where  BELONG_CHAN = '${param}'
+--     ORDER BY CAST(CHAN_LEVEL_CODE AS bigint)
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+  <select id="selectBytemp" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where  CHAN_TEMPLATE = '${param}'
+--     ORDER BY CAST(CHAN_LEVEL_CODE AS bigint)
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+  <select id="selectBytemp2" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where  INFO_TEMPLATE = '${param}'
+--     ORDER BY CAST(CHAN_LEVEL_CODE AS bigint)
+    ORDER BY CHAN_LEVEL_CODE
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_CHAN
+    where  CHAN_NAME = '${chanName}'
+  </select>
+
+  <select id="selectMaxValue"  resultType="string">
+    select
+    Max(CHAN_LEVEL_CODE)
+    from T_CMS_CHAN
+    where CHAN_LEVEL_CODE like '${param}%' and CHAN_LEVEL = '${num}'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_CHAN
+    where CHAN_ID = #{chanId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.Chan">
+    insert into T_CMS_CHAN (CHAN_ID, CHAN_NAME, BELONG_CHAN, 
+      CHAN_TYPE, CHAN_IMAGE, CHAN_BANNER, 
+      OPENLINK, LINK_ADDRESS, OPEN_TYPE, 
+      SORT_CODE, CHAN_TEMPLATE, INFO_TEMPLATE, 
+      PROCESS_ID, CHAN_LEVEL_CODE, CHAN_LEVEL, 
+      CHAN_CODE, SITE_ID, CREATE_USER, 
+      CREATE_TIME, CHAN_STATUS, CHAN_TEMPLATENAME, 
+      INFO_TEMPLATENAME, BELONG_CHANNAME, CHEN_DISC
+      )
+    values (#{chanId,jdbcType=BIGINT}, #{chanName,jdbcType=NVARCHAR}, #{belongChan,jdbcType=BIGINT}, 
+      #{chanType,jdbcType=NVARCHAR}, #{chanImage,jdbcType=NVARCHAR}, #{chanBanner,jdbcType=NVARCHAR}, 
+      #{openlink,jdbcType=INTEGER}, #{linkAddress,jdbcType=NVARCHAR}, #{openType,jdbcType=INTEGER}, 
+      #{sortCode,jdbcType=INTEGER}, #{chanTemplate,jdbcType=BIGINT}, #{infoTemplate,jdbcType=BIGINT}, 
+      #{processId,jdbcType=BIGINT}, #{chanLevelCode,jdbcType=VARCHAR}, #{chanLevel,jdbcType=INTEGER}, 
+      #{chanCode,jdbcType=NVARCHAR}, #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{chanStatus,jdbcType=INTEGER}, #{chanTemplatename,jdbcType=NVARCHAR}, 
+      #{infoTemplatename,jdbcType=NVARCHAR}, #{belongChanname,jdbcType=NVARCHAR}, #{chenDisc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Chan">
+    insert into T_CMS_CHAN
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="chanId != null">
+        CHAN_ID,
+      </if>
+      <if test="chanName != null">
+        CHAN_NAME,
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN,
+      </if>
+      <if test="chanType != null">
+        CHAN_TYPE,
+      </if>
+      <if test="chanImage != null">
+        CHAN_IMAGE,
+      </if>
+      <if test="chanBanner != null">
+        CHAN_BANNER,
+      </if>
+      <if test="openlink != null">
+        OPENLINK,
+      </if>
+      <if test="linkAddress != null">
+        LINK_ADDRESS,
+      </if>
+      <if test="openType != null">
+        OPEN_TYPE,
+      </if>
+      <if test="sortCode != null">
+        SORT_CODE,
+      </if>
+      <if test="chanTemplate != null">
+        CHAN_TEMPLATE,
+      </if>
+      <if test="infoTemplate != null">
+        INFO_TEMPLATE,
+      </if>
+      <if test="processId != null">
+        PROCESS_ID,
+      </if>
+      <if test="chanLevelCode != null">
+        CHAN_LEVEL_CODE,
+      </if>
+      <if test="chanLevel != null">
+        CHAN_LEVEL,
+      </if>
+      <if test="chanCode != null">
+        CHAN_CODE,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="chanStatus != null">
+        CHAN_STATUS,
+      </if>
+      <if test="chanTemplatename != null">
+        CHAN_TEMPLATENAME,
+      </if>
+      <if test="infoTemplatename != null">
+        INFO_TEMPLATENAME,
+      </if>
+      <if test="belongChanname != null">
+        BELONG_CHANNAME,
+      </if>
+      <if test="chenDisc != null">
+        CHEN_DISC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="chanId != null">
+        #{chanId,jdbcType=BIGINT},
+      </if>
+      <if test="chanName != null">
+        #{chanName,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChan != null">
+        #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="chanType != null">
+        #{chanType,jdbcType=NVARCHAR},
+      </if>
+      <if test="chanImage != null">
+        #{chanImage,jdbcType=NVARCHAR},
+      </if>
+      <if test="chanBanner != null">
+        #{chanBanner,jdbcType=NVARCHAR},
+      </if>
+      <if test="openlink != null">
+        #{openlink,jdbcType=INTEGER},
+      </if>
+      <if test="linkAddress != null">
+        #{linkAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="openType != null">
+        #{openType,jdbcType=INTEGER},
+      </if>
+      <if test="sortCode != null">
+        #{sortCode,jdbcType=INTEGER},
+      </if>
+      <if test="chanTemplate != null">
+        #{chanTemplate,jdbcType=BIGINT},
+      </if>
+      <if test="infoTemplate != null">
+        #{infoTemplate,jdbcType=BIGINT},
+      </if>
+      <if test="processId != null">
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="chanLevelCode != null">
+        #{chanLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chanLevel != null">
+        #{chanLevel,jdbcType=INTEGER},
+      </if>
+      <if test="chanCode != null">
+        #{chanCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chanStatus != null">
+        #{chanStatus,jdbcType=INTEGER},
+      </if>
+      <if test="chanTemplatename != null">
+        #{chanTemplatename,jdbcType=NVARCHAR},
+      </if>
+      <if test="infoTemplatename != null">
+        #{infoTemplatename,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChanname != null">
+        #{belongChanname,jdbcType=NVARCHAR},
+      </if>
+      <if test="chenDisc != null">
+        #{chenDisc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Chan">
+    update T_CMS_CHAN
+    <set>
+      <if test="chanName != null">
+        CHAN_NAME = #{chanName,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="chanType != null">
+        CHAN_TYPE = #{chanType,jdbcType=NVARCHAR},
+      </if>
+      <if test="chanImage != null">
+        CHAN_IMAGE = #{chanImage,jdbcType=NVARCHAR},
+      </if>
+      <if test="chanBanner != null">
+        CHAN_BANNER = #{chanBanner,jdbcType=NVARCHAR},
+      </if>
+      <if test="openlink != null">
+        OPENLINK = #{openlink,jdbcType=INTEGER},
+      </if>
+      <if test="linkAddress != null">
+        LINK_ADDRESS = #{linkAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="openType != null">
+        OPEN_TYPE = #{openType,jdbcType=INTEGER},
+      </if>
+      <if test="sortCode != null">
+        SORT_CODE = #{sortCode,jdbcType=INTEGER},
+      </if>
+      <if test="chanTemplate != null">
+        CHAN_TEMPLATE = #{chanTemplate,jdbcType=BIGINT},
+      </if>
+      <if test="infoTemplate != null">
+        INFO_TEMPLATE = #{infoTemplate,jdbcType=BIGINT},
+      </if>
+      <if test="processId != null">
+        PROCESS_ID = #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="chanLevelCode != null">
+        CHAN_LEVEL_CODE = #{chanLevelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chanLevel != null">
+        CHAN_LEVEL = #{chanLevel,jdbcType=INTEGER},
+      </if>
+      <if test="chanCode != null">
+        CHAN_CODE = #{chanCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chanStatus != null">
+        CHAN_STATUS = #{chanStatus,jdbcType=INTEGER},
+      </if>
+      <if test="chanTemplatename != null">
+        CHAN_TEMPLATENAME = #{chanTemplatename,jdbcType=NVARCHAR},
+      </if>
+      <if test="infoTemplatename != null">
+        INFO_TEMPLATENAME = #{infoTemplatename,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChanname != null">
+        BELONG_CHANNAME = #{belongChanname,jdbcType=NVARCHAR},
+      </if>
+      <if test="chenDisc != null">
+        CHEN_DISC = #{chenDisc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where CHAN_ID = #{chanId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="net.minggao.cms.model.Chan">
+    update T_CMS_CHAN
+    set CHAN_NAME = #{chanName,jdbcType=NVARCHAR},
+      BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      CHAN_TYPE = #{chanType,jdbcType=NVARCHAR},
+      CHAN_IMAGE = #{chanImage,jdbcType=NVARCHAR},
+      CHAN_BANNER = #{chanBanner,jdbcType=NVARCHAR},
+      OPENLINK = #{openlink,jdbcType=INTEGER},
+      LINK_ADDRESS = #{linkAddress,jdbcType=NVARCHAR},
+      OPEN_TYPE = #{openType,jdbcType=INTEGER},
+      SORT_CODE = #{sortCode,jdbcType=INTEGER},
+      CHAN_TEMPLATE = #{chanTemplate,jdbcType=BIGINT},
+      INFO_TEMPLATE = #{infoTemplate,jdbcType=BIGINT},
+      PROCESS_ID = #{processId,jdbcType=BIGINT},
+      CHAN_LEVEL_CODE = #{chanLevelCode,jdbcType=VARCHAR},
+      CHAN_LEVEL = #{chanLevel,jdbcType=INTEGER},
+      CHAN_CODE = #{chanCode,jdbcType=NVARCHAR},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CHAN_STATUS = #{chanStatus,jdbcType=INTEGER},
+      CHAN_TEMPLATENAME = #{chanTemplatename,jdbcType=NVARCHAR},
+      INFO_TEMPLATENAME = #{infoTemplatename,jdbcType=NVARCHAR},
+      BELONG_CHANNAME = #{belongChanname,jdbcType=NVARCHAR},
+      CHEN_DISC = #{chenDisc,jdbcType=LONGVARCHAR}
+    where CHAN_ID = #{chanId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.Chan">
+    update T_CMS_CHAN
+    set CHAN_NAME = #{chanName,jdbcType=NVARCHAR},
+      BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      CHAN_TYPE = #{chanType,jdbcType=NVARCHAR},
+      CHAN_IMAGE = #{chanImage,jdbcType=NVARCHAR},
+      CHAN_BANNER = #{chanBanner,jdbcType=NVARCHAR},
+      OPENLINK = #{openlink,jdbcType=INTEGER},
+      LINK_ADDRESS = #{linkAddress,jdbcType=NVARCHAR},
+      OPEN_TYPE = #{openType,jdbcType=INTEGER},
+      SORT_CODE = #{sortCode,jdbcType=INTEGER},
+      CHAN_TEMPLATE = #{chanTemplate,jdbcType=BIGINT},
+      INFO_TEMPLATE = #{infoTemplate,jdbcType=BIGINT},
+      PROCESS_ID = #{processId,jdbcType=BIGINT},
+      CHAN_LEVEL_CODE = #{chanLevelCode,jdbcType=VARCHAR},
+      CHAN_LEVEL = #{chanLevel,jdbcType=INTEGER},
+      CHAN_CODE = #{chanCode,jdbcType=NVARCHAR},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CHAN_STATUS = #{chanStatus,jdbcType=INTEGER},
+      CHAN_TEMPLATENAME = #{chanTemplatename,jdbcType=NVARCHAR},
+      INFO_TEMPLATENAME = #{infoTemplatename,jdbcType=NVARCHAR},
+      BELONG_CHANNAME = #{belongChanname,jdbcType=NVARCHAR}
+    where CHAN_ID = #{chanId,jdbcType=BIGINT}
+  </update>
+</mapper>

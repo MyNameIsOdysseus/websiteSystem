@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ArticleRecordMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.ArticleRecord">
+    <id column="RECORD_ID" jdbcType="BIGINT" property="recordId" />
+    <result column="HANDLETIME" jdbcType="TIMESTAMP" property="handletime" />
+    <result column="HANDLER" jdbcType="NVARCHAR" property="handler" />
+    <result column="HANDLERESULT" jdbcType="NVARCHAR" property="handleresult" />
+    <result column="ARTICLE_ID" jdbcType="BIGINT" property="articleId" />
+    <result column="HANDLE_ID" jdbcType="BIGINT" property="handleId" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AUDIT_SORTED" jdbcType="INTEGER" property="auditSorted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    RECORD_ID, HANDLETIME, HANDLER, HANDLERESULT, ARTICLE_ID, HANDLE_ID, SITE_ID, CREATE_USER, 
+    CREATE_TIME, AUDIT_SORTED
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_AUDITRECORD
+    where RECORD_ID = #{recordId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByArticleId" parameterType="java.lang.Long"  resultType="java.lang.Integer">
+    select
+    max(AUDIT_SORTED)
+    from T_CMS_AUDITRECORD
+    where ARTICLE_ID = #{articleId}
+  </select>
+
+  <select id="selectByArticleIdList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_AUDITRECORD
+    where ARTICLE_ID = #{articleId}
+--     ORDER BY CAST(AUDIT_SORTED as int)
+    ORDER BY AUDIT_SORTED 
+
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_AUDITRECORD
+    where HANDLER = #{username} and HANDLERESULT !=''
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_AUDITRECORD
+    where RECORD_ID = #{recordId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByArticleId" parameterType="java.lang.Long">
+    delete from T_CMS_AUDITRECORD
+    where ARTICLE_ID = #{articleId}
+  </delete>
+
+  <insert id="insert" parameterType="net.minggao.cms.model.ArticleRecord">
+    insert into T_CMS_AUDITRECORD (RECORD_ID, HANDLETIME, HANDLER, 
+      HANDLERESULT, ARTICLE_ID, HANDLE_ID, 
+      SITE_ID, CREATE_USER, CREATE_TIME, 
+      AUDIT_SORTED)
+    values (#{recordId,jdbcType=BIGINT}, #{handletime,jdbcType=TIMESTAMP}, #{handler,jdbcType=NVARCHAR}, 
+      #{handleresult,jdbcType=NVARCHAR}, #{articleId,jdbcType=BIGINT}, #{handleId,jdbcType=BIGINT}, 
+      #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{auditSorted,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.ArticleRecord">
+    insert into T_CMS_AUDITRECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        RECORD_ID,
+      </if>
+      <if test="handletime != null">
+        HANDLETIME,
+      </if>
+      <if test="handler != null">
+        HANDLER,
+      </if>
+      <if test="handleresult != null">
+        HANDLERESULT,
+      </if>
+      <if test="articleId != null">
+        ARTICLE_ID,
+      </if>
+      <if test="handleId != null">
+        HANDLE_ID,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="auditSorted != null">
+        AUDIT_SORTED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="handletime != null">
+        #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handler != null">
+        #{handler,jdbcType=NVARCHAR},
+      </if>
+      <if test="handleresult != null">
+        #{handleresult,jdbcType=NVARCHAR},
+      </if>
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="handleId != null">
+        #{handleId,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditSorted != null">
+        #{auditSorted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.ArticleRecord">
+    update T_CMS_AUDITRECORD
+    <set>
+      <if test="handletime != null">
+        HANDLETIME = #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handler != null">
+        HANDLER = #{handler,jdbcType=NVARCHAR},
+      </if>
+      <if test="handleresult != null">
+        HANDLERESULT = #{handleresult,jdbcType=NVARCHAR},
+      </if>
+      <if test="articleId != null">
+        ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="handleId != null">
+        HANDLE_ID = #{handleId,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditSorted != null">
+        AUDIT_SORTED = #{auditSorted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where RECORD_ID = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.ArticleRecord">
+    update T_CMS_AUDITRECORD
+    set HANDLETIME = #{handletime,jdbcType=TIMESTAMP},
+      HANDLER = #{handler,jdbcType=NVARCHAR},
+      HANDLERESULT = #{handleresult,jdbcType=NVARCHAR},
+      ARTICLE_ID = #{articleId,jdbcType=BIGINT},
+      HANDLE_ID = #{handleId,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      AUDIT_SORTED = #{auditSorted,jdbcType=INTEGER}
+    where RECORD_ID = #{recordId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.TemplateMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Template">
+    <id column="TEMPLATE_ID" jdbcType="BIGINT" property="templateId" />
+    <result column="TEMPLATE_CODE" jdbcType="NVARCHAR" property="templateCode" />
+    <result column="TEMPLATE_TYPE" jdbcType="INTEGER" property="templateType" />
+    <result column="TEMPLATE_NAME" jdbcType="NVARCHAR" property="templateName" />
+    <result column="TEMPLATE_CONTENT" jdbcType="LONGVARCHAR" property="templateContent" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TEMPLATE_ID, TEMPLATE_CODE, TEMPLATE_TYPE,  TEMPLATE_NAME, TEMPLATE_CONTENT, SITE_ID, CREATE_USER, CREATE_TIME
+  </sql>
+
+  <select id="getTemplateList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_TEMPLATE
+    WHERE 1=1
+    <if test="templateName != null">
+      AND TEMPLATE_NAME LIKE '%${templateName}%'
+    </if>
+  </select>
+
+  <select id="getMaxNum" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_TEMPLATE
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_TEMPLATE
+    where TEMPLATE_ID = #{templateId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByname" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_TEMPLATE
+    where TEMPLATE_NAME = #{templateName}
+  </select>
+
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_TEMPLATE
+    where TEMPLATE_TYPE = 2
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Template">
+    update T_CMS_TEMPLATE
+    <set>
+      <if test="templateCode != null">
+        TEMPLATE_CODE = #{templateCode,jdbcType=NVARCHAR},
+      </if>
+      <if test="templateType != null">
+        TEMPLATE_TYPE = #{templateType,jdbcType=INTEGER},
+      </if>
+      <if test="templateName != null">
+        TEMPLATE_NAME = #{templateName,jdbcType=NVARCHAR},
+      </if>
+      <if test="templateContent != null">
+        TEMPLATE_CONTENT = #{templateContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where TEMPLATE_ID = #{templateId,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="insert" parameterType="net.minggao.cms.model.Template">
+    insert into T_CMS_TEMPLATE (TEMPLATE_ID,TEMPLATE_CODE, TEMPLATE_TYPE,
+      TEMPLATE_NAME, TEMPLATE_CONTENT
+      )
+    values (#{templateId,jdbcType=BIGINT},#{templateCode,jdbcType=NVARCHAR}, #{templateType,jdbcType=INTEGER},
+      #{templateName,jdbcType=NVARCHAR}, #{templateContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_TEMPLATE
+    where TEMPLATE_ID = #{templateId,jdbcType=BIGINT}
+  </delete>
+  
+  <select id="ajaxRepeat" parameterType="java.lang.String" resultType="java.lang.String">
+    select TEMPLATE_ID from T_CMS_TEMPLATE
+    where TEMPLATE_CODE = '${templateCode}'
+  </select>
+
+</mapper>

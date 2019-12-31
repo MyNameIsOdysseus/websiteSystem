@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.UserRightMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.UserRight">
+    <id column="RIGHT_ID" jdbcType="BIGINT" property="rightId" />
+    <result column="CHAN_ID" jdbcType="BIGINT" property="chanId" />
+    <result column="RIGHT_SCOPE" jdbcType="INTEGER" property="rightScope" />
+    <result column="USER_ID" jdbcType="BIGINT" property="userId" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    RIGHT_ID, CHAN_ID, RIGHT_SCOPE, USER_ID, SITE_ID, CREATE_USER, CREATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_USERRIGHT
+    where RIGHT_ID = #{rightId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USERRIGHT
+  </select>
+  <select id="selectBynum" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USERRIGHT
+    where USER_ID = #{userid} and CHAN_ID = #{chanid}
+  </select>
+  <select id="selectByUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USERRIGHT
+    where USER_ID = #{userid}
+--     ORDER BY  CAST(CHAN_ID as bigint)
+    ORDER BY CHAN_ID
+  </select>
+
+  <select id="selectByZu"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USERRIGHT
+    where USER_ID = #{userid} and CHAN_ID like '${chanlevel}%'
+--     ORDER BY  CAST(CHAN_ID as bigint)
+    ORDER BY CHAN_ID
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_USERRIGHT
+    where RIGHT_ID = #{rightId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.UserRight">
+    insert into T_CMS_USERRIGHT (RIGHT_ID, CHAN_ID, RIGHT_SCOPE, 
+      USER_ID, SITE_ID, CREATE_USER, 
+      CREATE_TIME)
+    values (#{rightId,jdbcType=BIGINT}, #{chanId,jdbcType=BIGINT}, #{rightScope,jdbcType=INTEGER}, 
+      #{userId,jdbcType=BIGINT}, #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.UserRight">
+    insert into T_CMS_USERRIGHT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rightId != null">
+        RIGHT_ID,
+      </if>
+      <if test="chanId != null">
+        CHAN_ID,
+      </if>
+      <if test="rightScope != null">
+        RIGHT_SCOPE,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rightId != null">
+        #{rightId,jdbcType=BIGINT},
+      </if>
+      <if test="chanId != null">
+        #{chanId,jdbcType=BIGINT},
+      </if>
+      <if test="rightScope != null">
+        #{rightScope,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.UserRight">
+    update T_CMS_USERRIGHT
+    <set>
+      <if test="chanId != null">
+        CHAN_ID = #{chanId,jdbcType=BIGINT},
+      </if>
+      <if test="rightScope != null">
+        RIGHT_SCOPE = #{rightScope,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where RIGHT_ID = #{rightId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.UserRight">
+    update T_CMS_USERRIGHT
+    set CHAN_ID = #{chanId,jdbcType=BIGINT},
+      RIGHT_SCOPE = #{rightScope,jdbcType=INTEGER},
+      USER_ID = #{userId,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where RIGHT_ID = #{rightId,jdbcType=BIGINT}
+  </update>
+</mapper>

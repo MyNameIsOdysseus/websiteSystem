@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ProcessActiMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.ProcessActi">
+    <id column="PROCESSACTI_ID" jdbcType="BIGINT" property="processactiId" />
+    <result column="PROCESSACTI_NUM" jdbcType="INTEGER" property="processactiNum" />
+    <result column="PROCESSACTI_USER" jdbcType="BIGINT" property="processactiUser" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="PROCESS_ID" jdbcType="BIGINT" property="processId" />
+    <result column="PROCESSACTI_USERNAME" jdbcType="NVARCHAR" property="processactiUsername" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PROCESSACTI_ID, PROCESSACTI_NUM, PROCESSACTI_USER, SITE_ID, CREATE_USER, CREATE_TIME, 
+    PROCESS_ID, PROCESSACTI_USERNAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESSACTI
+    where PROCESSACTI_ID = #{processactiId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByProcessId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESSACTI
+    where PROCESS_ID = #{processId}
+--     ORDER BY CAST(PROCESSACTI_NUM AS int)
+    ORDER BY PROCESSACTI_NUM
+  </select>
+  <select id="selectList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESSACTI
+    where PROCESS_ID = #{setid,jdbcType=BIGINT}
+--     ORDER BY CAST(PROCESSACTI_NUM AS int)
+    ORDER BY PROCESSACTI_NUM
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_PROCESSACTI
+    where PROCESSACTI_ID = #{processactiId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByProcessid" parameterType="java.lang.Long">
+    delete from T_CMS_PROCESSACTI
+    where PROCESS_ID = #{processId}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.ProcessActi">
+    insert into T_CMS_PROCESSACTI (PROCESSACTI_ID, PROCESSACTI_NUM, PROCESSACTI_USER, 
+      SITE_ID, CREATE_USER, CREATE_TIME, 
+      PROCESS_ID, PROCESSACTI_USERNAME)
+    values (#{processactiId,jdbcType=BIGINT}, #{processactiNum,jdbcType=INTEGER}, #{processactiUser,jdbcType=BIGINT}, 
+      #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{processId,jdbcType=BIGINT}, #{processactiUsername,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.ProcessActi">
+    insert into T_CMS_PROCESSACTI
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="processactiId != null">
+        PROCESSACTI_ID,
+      </if>
+      <if test="processactiNum != null">
+        PROCESSACTI_NUM,
+      </if>
+      <if test="processactiUser != null">
+        PROCESSACTI_USER,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="processId != null">
+        PROCESS_ID,
+      </if>
+      <if test="processactiUsername != null">
+        PROCESSACTI_USERNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="processactiId != null">
+        #{processactiId,jdbcType=BIGINT},
+      </if>
+      <if test="processactiNum != null">
+        #{processactiNum,jdbcType=INTEGER},
+      </if>
+      <if test="processactiUser != null">
+        #{processactiUser,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="processId != null">
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="processactiUsername != null">
+        #{processactiUsername,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.ProcessActi">
+    update T_CMS_PROCESSACTI
+    <set>
+      <if test="processactiNum != null">
+        PROCESSACTI_NUM = #{processactiNum,jdbcType=INTEGER},
+      </if>
+      <if test="processactiUser != null">
+        PROCESSACTI_USER = #{processactiUser,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="processId != null">
+        PROCESS_ID = #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="processactiUsername != null">
+        PROCESSACTI_USERNAME = #{processactiUsername,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where PROCESSACTI_ID = #{processactiId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.ProcessActi">
+    update T_CMS_PROCESSACTI
+    set PROCESSACTI_NUM = #{processactiNum,jdbcType=INTEGER},
+      PROCESSACTI_USER = #{processactiUser,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      PROCESS_ID = #{processId,jdbcType=BIGINT},
+      PROCESSACTI_USERNAME = #{processactiUsername,jdbcType=NVARCHAR}
+    where PROCESSACTI_ID = #{processactiId,jdbcType=BIGINT}
+  </update>
+</mapper>

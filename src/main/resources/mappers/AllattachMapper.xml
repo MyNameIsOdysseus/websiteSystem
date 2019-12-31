@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.AllattachMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Allattach">
+    <result column="FILENAME" jdbcType="NVARCHAR" property="filename" />
+    <result column="FILEREALNAME" jdbcType="NVARCHAR" property="filerealname" />
+    <result column="FILESIZE" jdbcType="BIGINT" property="filesize" />
+    <result column="ENCRYPT" jdbcType="INTEGER" property="encrypt" />
+    <result column="FIEL_PATH" jdbcType="NVARCHAR" property="fielPath" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    FILENAME, FILEREALNAME, FILESIZE, ENCRYPT, FIEL_PATH
+  </sql>
+
+  <select id="selectByid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from TS_ALLATTACH
+    where FILENAME = #{fileid}
+  </select>
+
+
+  <insert id="insert" parameterType="net.minggao.cms.model.Allattach">
+    insert into TS_ALLATTACH (FILENAME, FILEREALNAME, FILESIZE, 
+      ENCRYPT, FIEL_PATH)
+    values (#{filename,jdbcType=NVARCHAR}, #{filerealname,jdbcType=NVARCHAR}, #{filesize,jdbcType=BIGINT}, 
+      #{encrypt,jdbcType=INTEGER}, #{fielPath,jdbcType=NVARCHAR})
+  </insert>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from TS_ALLATTACH
+    where FILENAME = #{filename,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Allattach">
+    insert into TS_ALLATTACH
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="filename != null">
+        FILENAME,
+      </if>
+      <if test="filerealname != null">
+        FILEREALNAME,
+      </if>
+      <if test="filesize != null">
+        FILESIZE,
+      </if>
+      <if test="encrypt != null">
+        ENCRYPT,
+      </if>
+      <if test="fielPath != null">
+        FIEL_PATH,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="filename != null">
+        #{filename,jdbcType=NVARCHAR},
+      </if>
+      <if test="filerealname != null">
+        #{filerealname,jdbcType=NVARCHAR},
+      </if>
+      <if test="filesize != null">
+        #{filesize,jdbcType=BIGINT},
+      </if>
+      <if test="encrypt != null">
+        #{encrypt,jdbcType=INTEGER},
+      </if>
+      <if test="fielPath != null">
+        #{fielPath,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

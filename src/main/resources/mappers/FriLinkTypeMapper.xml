@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.FriLinkTypeMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.FriLinkType">
+    <id column="FRLINK_ID" jdbcType="BIGINT" property="frlinkId" />
+    <result column="LINK_TYPE" jdbcType="NVARCHAR" property="linkType" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="LINK_CODE" jdbcType="INTEGER" property="linkCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    FRLINK_ID, LINK_TYPE, SITE_ID, CREATE_USER, CREATE_TIME, LINK_CODE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_FRILINKTYPE
+    where FRLINK_ID = #{frlinkId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_FRILINKTYPE
+    where LINK_TYPE = '${name}'
+  </select>
+
+  <select id="selectAll" parameterType="net.minggao.cms.model.FriLinkType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_FRILINKTYPE
+    where 1=1
+    <if test="linkType != null">
+      AND LINK_TYPE like  '%${linkType}%'
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_FRILINKTYPE
+    where FRLINK_ID = #{frlinkId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.FriLinkType">
+    insert into T_CMS_FRILINKTYPE (FRLINK_ID, LINK_TYPE, SITE_ID, 
+      CREATE_USER, CREATE_TIME, LINK_CODE
+      )
+    values (#{frlinkId,jdbcType=BIGINT}, #{linkType,jdbcType=NVARCHAR}, #{siteId,jdbcType=BIGINT}, 
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{linkCode,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.FriLinkType">
+    insert into T_CMS_FRILINKTYPE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="frlinkId != null">
+        FRLINK_ID,
+      </if>
+      <if test="linkType != null">
+        LINK_TYPE,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="linkCode != null">
+        LINK_CODE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="frlinkId != null">
+        #{frlinkId,jdbcType=BIGINT},
+      </if>
+      <if test="linkType != null">
+        #{linkType,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="linkCode != null">
+        #{linkCode,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.FriLinkType">
+    update T_CMS_FRILINKTYPE
+    <set>
+      <if test="linkType != null">
+        LINK_TYPE = #{linkType,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="linkCode != null">
+        LINK_CODE = #{linkCode,jdbcType=INTEGER},
+      </if>
+    </set>
+    where FRLINK_ID = #{frlinkId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.FriLinkType">
+    update T_CMS_FRILINKTYPE
+    set LINK_TYPE = #{linkType,jdbcType=NVARCHAR},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      LINK_CODE = #{linkCode,jdbcType=INTEGER}
+    where FRLINK_ID = #{frlinkId,jdbcType=BIGINT}
+  </update>
+</mapper>

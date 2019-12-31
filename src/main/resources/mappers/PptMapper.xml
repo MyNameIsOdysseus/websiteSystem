@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.PptMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Ppt">
+    <id column="PPT_ID" jdbcType="BIGINT" property="pptId" />
+    <result column="PPT_NAME" jdbcType="NVARCHAR" property="pptName" />
+    <result column="LINK_ADDRESS" jdbcType="NVARCHAR" property="linkAddress" />
+    <result column="TITLE" jdbcType="NVARCHAR" property="title" />
+    <result column="SORTED" jdbcType="INTEGER" property="sorted" />
+    <result column="BELONG_CHAN" jdbcType="BIGINT" property="belongChan" />
+    <result column="BELONG_CHANNAME" jdbcType="BIGINT" property="belongChanName" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="PPTSAVENAME" jdbcType="NVARCHAR" property="pptsavename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PPT_ID, PPT_NAME, LINK_ADDRESS, TITLE, SORTED, BELONG_CHAN, BELONG_CHANNAME,CREATE_USER, CREATE_TIME,
+    SITE_ID, PPTSAVENAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_PPT
+    where PPT_ID = #{pptId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectPptList"  parameterType="net.minggao.cms.model.Ppt"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PPT
+    WHERE 1=1
+    <if test="pptName != null">
+      AND PPT_NAME LIKE '%${pptName}%'
+    </if>
+    <if test="title != null">
+      AND TITLE LIKE '%${title}%'
+    </if>
+    <if test="belongChanName != null">
+      AND BELONG_CHANNAME LIKE '%${belongChanName}%'
+    </if>
+--     ORDER BY CAST(SORTED AS int)
+    ORDER BY SORTED
+  </select>
+
+  <select id="getMaxnum"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PPT
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_PPT
+    where PPT_ID = #{pptId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.Ppt">
+    insert into T_CMS_PPT (PPT_ID, PPT_NAME, LINK_ADDRESS, 
+      TITLE, SORTED, BELONG_CHAN, BELONG_CHANNAME,
+      CREATE_USER, CREATE_TIME, SITE_ID, 
+      PPTSAVENAME)
+    values (#{pptId,jdbcType=BIGINT}, #{pptName,jdbcType=NVARCHAR}, #{linkAddress,jdbcType=NVARCHAR}, 
+      #{title,jdbcType=NVARCHAR}, #{sorted,jdbcType=INTEGER}, #{belongChan,jdbcType=BIGINT},#{belongChanName,jdbcType=NVARCHAR},
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{siteId,jdbcType=BIGINT}, 
+      #{pptsavename,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Ppt">
+    insert into T_CMS_PPT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pptId != null">
+        PPT_ID,
+      </if>
+      <if test="pptName != null">
+        PPT_NAME,
+      </if>
+      <if test="linkAddress != null">
+        LINK_ADDRESS,
+      </if>
+      <if test="title != null">
+        TITLE,
+      </if>
+      <if test="sorted != null">
+        SORTED,
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="pptsavename != null">
+        PPTSAVENAME,
+      </if>
+      <if test="belongChanName != null">
+        BELONG_CHANNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pptId != null">
+        #{pptId,jdbcType=BIGINT},
+      </if>
+      <if test="pptName != null">
+        #{pptName,jdbcType=NVARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        #{linkAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=NVARCHAR},
+      </if>
+      <if test="sorted != null">
+        #{sorted,jdbcType=INTEGER},
+      </if>
+      <if test="belongChan != null">
+        #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="pptsavename != null">
+        #{pptsavename,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChanName != null">
+        #{belongChanName,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Ppt">
+    update T_CMS_PPT
+    <set>
+      <if test="pptName != null">
+        PPT_NAME = #{pptName,jdbcType=NVARCHAR},
+      </if>
+      <if test="linkAddress != null">
+        LINK_ADDRESS = #{linkAddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=NVARCHAR},
+      </if>
+      <if test="sorted != null">
+        SORTED = #{sorted,jdbcType=INTEGER},
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="pptsavename != null">
+        PPTSAVENAME = #{pptsavename,jdbcType=NVARCHAR},
+      </if>
+      <if test="belongChanName != null">
+        BELONG_CHANNAME = #{belongChanName,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where PPT_ID = #{pptId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.Ppt">
+    update T_CMS_PPT
+    set PPT_NAME = #{pptName,jdbcType=NVARCHAR},
+      LINK_ADDRESS = #{linkAddress,jdbcType=NVARCHAR},
+      TITLE = #{title,jdbcType=NVARCHAR},
+      SORTED = #{sorted,jdbcType=INTEGER},
+      BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      BELONG_CHANNAME = #{belongChanName,jdbcType=NVARCHAR},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      PPTSAVENAME = #{pptsavename,jdbcType=NVARCHAR}
+    where PPT_ID = #{pptId,jdbcType=BIGINT}
+  </update>
+</mapper>

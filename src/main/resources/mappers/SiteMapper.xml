@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.SiteMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Site">
+    <id column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="SITE_NAME" jdbcType="NVARCHAR" property="siteName" />
+    <result column="SITE_KEYWORD" jdbcType="NVARCHAR" property="siteKeyword" />
+    <result column="SITE_DESCRIBE" jdbcType="NVARCHAR" property="siteDescribe" />
+    <result column="ADDRESS" jdbcType="NVARCHAR" property="address" />
+    <result column="TELEPHONE" jdbcType="NVARCHAR" property="telephone" />
+    <result column="EMAIL" jdbcType="NVARCHAR" property="email" />
+    <result column="COP_MESSAGE" jdbcType="NVARCHAR" property="copMessage" />
+    <result column="SITE_LOGO" jdbcType="NVARCHAR" property="siteLogo" />
+    <result column="TRAILER_TITLE" jdbcType="NVARCHAR" property="trailerTitle" />
+    <result column="TRAILER" jdbcType="NVARCHAR" property="trailer" />
+    <result column="TRAILER_COVER" jdbcType="NVARCHAR" property="trailerCover" />
+    <result column="MOBILET_COVER" jdbcType="NVARCHAR" property="mobiletCover" />
+    <result column="SITE_CATALOG" jdbcType="NVARCHAR" property="siteCatalog" />
+    <result column="SITE_STATUS" jdbcType="INTEGER" property="siteStatus" />
+    <result column="CREATE_USER" jdbcType="NVARCHAR" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SITE_ID, SITE_NAME, SITE_KEYWORD, SITE_DESCRIBE, ADDRESS, TELEPHONE, EMAIL, COP_MESSAGE, 
+    SITE_LOGO, TRAILER_TITLE, TRAILER, TRAILER_COVER, MOBILET_COVER, SITE_CATALOG, SITE_STATUS, 
+    CREATE_USER, CREATE_TIME
+  </sql>
+  <select id="selectAll" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_SITE
+    where 1=1
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_SITE
+    where SITE_ID = #{siteId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_SITE
+    where SITE_ID = #{siteId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="delete" >
+    delete from T_CMS_SITE
+  </delete>
+
+  <insert id="insert" parameterType="net.minggao.cms.model.Site">
+    insert into T_CMS_SITE (SITE_ID, SITE_NAME, SITE_KEYWORD, 
+      SITE_DESCRIBE, ADDRESS, TELEPHONE, 
+      EMAIL, COP_MESSAGE, SITE_LOGO, 
+      TRAILER_TITLE, TRAILER, TRAILER_COVER, 
+      MOBILET_COVER, SITE_CATALOG, SITE_STATUS, 
+      CREATE_USER, CREATE_TIME)
+    values (#{siteId,jdbcType=BIGINT}, #{siteName,jdbcType=NVARCHAR}, #{siteKeyword,jdbcType=NVARCHAR}, 
+      #{siteDescribe,jdbcType=NVARCHAR}, #{address,jdbcType=NVARCHAR}, #{telephone,jdbcType=NVARCHAR}, 
+      #{email,jdbcType=NVARCHAR}, #{copMessage,jdbcType=NVARCHAR}, #{siteLogo,jdbcType=NVARCHAR}, 
+      #{trailerTitle,jdbcType=NVARCHAR}, #{trailer,jdbcType=NVARCHAR}, #{trailerCover,jdbcType=NVARCHAR}, 
+      #{mobiletCover,jdbcType=NVARCHAR}, #{siteCatalog,jdbcType=NVARCHAR}, #{siteStatus,jdbcType=INTEGER}, 
+      #{createUser,jdbcType=NVARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Site">
+    insert into T_CMS_SITE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="siteName != null">
+        SITE_NAME,
+      </if>
+      <if test="siteKeyword != null">
+        SITE_KEYWORD,
+      </if>
+      <if test="siteDescribe != null">
+        SITE_DESCRIBE,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="telephone != null">
+        TELEPHONE,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="copMessage != null">
+        COP_MESSAGE,
+      </if>
+      <if test="siteLogo != null">
+        SITE_LOGO,
+      </if>
+      <if test="trailerTitle != null">
+        TRAILER_TITLE,
+      </if>
+      <if test="trailer != null">
+        TRAILER,
+      </if>
+      <if test="trailerCover != null">
+        TRAILER_COVER,
+      </if>
+      <if test="mobiletCover != null">
+        MOBILET_COVER,
+      </if>
+      <if test="siteCatalog != null">
+        SITE_CATALOG,
+      </if>
+      <if test="siteStatus != null">
+        SITE_STATUS,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteKeyword != null">
+        #{siteKeyword,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteDescribe != null">
+        #{siteDescribe,jdbcType=NVARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=NVARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="copMessage != null">
+        #{copMessage,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteLogo != null">
+        #{siteLogo,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailerTitle != null">
+        #{trailerTitle,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailer != null">
+        #{trailer,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailerCover != null">
+        #{trailerCover,jdbcType=NVARCHAR},
+      </if>
+      <if test="mobiletCover != null">
+        #{mobiletCover,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteCatalog != null">
+        #{siteCatalog,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteStatus != null">
+        #{siteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Site">
+    update T_CMS_SITE
+    <set>
+      <if test="siteName != null">
+        SITE_NAME = #{siteName,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteKeyword != null">
+        SITE_KEYWORD = #{siteKeyword,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteDescribe != null">
+        SITE_DESCRIBE = #{siteDescribe,jdbcType=NVARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=NVARCHAR},
+      </if>
+      <if test="telephone != null">
+        TELEPHONE = #{telephone,jdbcType=NVARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=NVARCHAR},
+      </if>
+      <if test="copMessage != null">
+        COP_MESSAGE = #{copMessage,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteLogo != null">
+        SITE_LOGO = #{siteLogo,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailerTitle != null">
+        TRAILER_TITLE = #{trailerTitle,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailer != null">
+        TRAILER = #{trailer,jdbcType=NVARCHAR},
+      </if>
+      <if test="trailerCover != null">
+        TRAILER_COVER = #{trailerCover,jdbcType=NVARCHAR},
+      </if>
+      <if test="mobiletCover != null">
+        MOBILET_COVER = #{mobiletCover,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteCatalog != null">
+        SITE_CATALOG = #{siteCatalog,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteStatus != null">
+        SITE_STATUS = #{siteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=NVARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SITE_ID = #{siteId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.Site">
+    update T_CMS_SITE
+    set SITE_NAME = #{siteName,jdbcType=NVARCHAR},
+      SITE_KEYWORD = #{siteKeyword,jdbcType=NVARCHAR},
+      SITE_DESCRIBE = #{siteDescribe,jdbcType=NVARCHAR},
+      ADDRESS = #{address,jdbcType=NVARCHAR},
+      TELEPHONE = #{telephone,jdbcType=NVARCHAR},
+      EMAIL = #{email,jdbcType=NVARCHAR},
+      COP_MESSAGE = #{copMessage,jdbcType=NVARCHAR},
+      SITE_LOGO = #{siteLogo,jdbcType=NVARCHAR},
+      TRAILER_TITLE = #{trailerTitle,jdbcType=NVARCHAR},
+      TRAILER = #{trailer,jdbcType=NVARCHAR},
+      TRAILER_COVER = #{trailerCover,jdbcType=NVARCHAR},
+      MOBILET_COVER = #{mobiletCover,jdbcType=NVARCHAR},
+      SITE_CATALOG = #{siteCatalog,jdbcType=NVARCHAR},
+      SITE_STATUS = #{siteStatus,jdbcType=INTEGER},
+      CREATE_USER = #{createUser,jdbcType=NVARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where SITE_ID = #{siteId,jdbcType=BIGINT}
+  </update>
+
+</mapper>

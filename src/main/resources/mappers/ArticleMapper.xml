@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ArticleMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Article">
+    <id column="ARTICLE_ID" jdbcType="BIGINT" property="articleId" />
+    <result column="UPSUBHEAD" jdbcType="NVARCHAR" property="upsubhead" />
+    <result column="DOWNSUBHEAD" jdbcType="NVARCHAR" property="downsubhead" />
+    <result column="NEWSSUBHEAD" jdbcType="NVARCHAR" property="newssubhead" />
+    <result column="PUBLISHDATE" jdbcType="TIMESTAMP" property="publishdate" />
+    <result column="INFORMATIONSOURCE" jdbcType="NVARCHAR" property="informationsource" />
+    <result column="SIMPLEINTRODUCE" jdbcType="NVARCHAR" property="simpleintroduce" />
+    <result column="KEYWORDS" jdbcType="NVARCHAR" property="keywords" />
+    <result column="IMAGE" jdbcType="NVARCHAR" property="image" />
+    <result column="ISOPENLINK" jdbcType="INTEGER" property="isopenlink" />
+    <result column="LINKADDRESS" jdbcType="NVARCHAR" property="linkaddress" />
+    <result column="ISSTICK" jdbcType="INTEGER" property="isstick" />
+    <result column="ISRECOMMEND" jdbcType="INTEGER" property="isrecommend" />
+    <result column="REFUSECOPY" jdbcType="INTEGER" property="refusecopy" />
+    <result column="SORTEDCODE" jdbcType="INTEGER" property="sortedcode" />
+    <result column="BELONG_CHAN" jdbcType="BIGINT" property="belongChan" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AUDIT_STATUS" jdbcType="INTEGER" property="auditStatus" />
+    <result column="AUTHOR" jdbcType="NVARCHAR" property="author" />
+    <result column="ISSUER" jdbcType="NVARCHAR" property="issuer" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="net.minggao.cms.model.Article">
+    <result column="ARTICLE_CONTENT_ID" jdbcType="LONGVARCHAR" property="articleContentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ARTICLE_ID, UPSUBHEAD, DOWNSUBHEAD, NEWSSUBHEAD, PUBLISHDATE, INFORMATIONSOURCE, 
+    SIMPLEINTRODUCE, KEYWORDS, IMAGE, ISOPENLINK, LINKADDRESS, ISSTICK, ISRECOMMEND, 
+    REFUSECOPY, SORTEDCODE, BELONG_CHAN, SITE_ID, CREATE_USER, CREATE_TIME, AUDIT_STATUS, 
+    AUTHOR, ISSUER
+  </sql>
+  <sql id="Blob_Column_List">
+    ARTICLE_CONTENT_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+  </select>
+
+  <select id="getList"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where AUDIT_STATUS=0
+    <if test="ImgName != null and ImgName !='' " >
+      and NEWSSUBHEAD like '%${ImgName}%'
+    </if>
+    <if test="TitleName != null">
+      and PUBLISHDATE >= #{TitleName}
+    </if>
+    <if test="ChanName != null">
+      and #{ChanName} >= PUBLISHDATE
+    </if>
+    <if test="chanid != null and chanid !='' ">
+      and BELONG_CHAN =#{chanid}
+    </if>
+--     ORDER BY CAST(SORTEDCODE AS int)
+    ORDER BY SORTEDCODE ASC,PUBLISHDATE DESC
+  </select>
+
+  <select id="getLsitByI"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where AUDIT_STATUS=0
+    <if test="ImgName != null and ImgName !='' " >
+      and NEWSSUBHEAD like '%${ImgName}%'
+    </if>
+    <if test="TitleName != null">
+      and PUBLISHDATE >= #{TitleName}
+    </if>
+    <if test="ChanName != null">
+      and #{ChanName} >= PUBLISHDATE
+    </if>
+    <if test="chanid != null and chanid !='' ">
+      and BELONG_CHAN =#{chanid}
+    </if>
+    <if test="userid !=null and userid != '' ">
+      and CREATE_USER =#{userid}
+    </if>
+--     ORDER BY CAST(SORTEDCODE AS int)
+    ORDER BY SORTEDCODE ASC,PUBLISHDATE DESC
+  </select>
+
+  <select id="selectByAll"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where 1=1
+    <if test="ImgName != null and ImgName !='' " >
+      and NEWSSUBHEAD like '%${ImgName}%'
+    </if>
+    <if test="TitleName != null">
+      and PUBLISHDATE >= #{TitleName}
+    </if>
+    <if test="ChanName != null">
+      and #{ChanName} >= PUBLISHDATE
+    </if>
+    <if test="articlelist != null ">
+      and ARTICLE_ID in
+      <foreach collection="articlelist" index="index" item="item" open="(" separator="," close=")" >
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="selectByChanId" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where BELONG_CHAN = #{chanid}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where CREATE_USER = #{username}
+  </select>
+
+  <select id="selectByArticleName"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where NEWSSUBHEAD = #{newname} and  BELONG_CHAN =#{chanid}
+  </select>
+
+  <select id="getMaxnum"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from T_CMS_ARTICLE
+    where 1=1
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_ARTICLE
+    where ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.Article">
+    insert into T_CMS_ARTICLE (ARTICLE_ID, UPSUBHEAD, DOWNSUBHEAD, 
+      NEWSSUBHEAD, PUBLISHDATE, INFORMATIONSOURCE, 
+      SIMPLEINTRODUCE, KEYWORDS, IMAGE, 
+      ISOPENLINK, LINKADDRESS, ISSTICK, 
+      ISRECOMMEND, REFUSECOPY, SORTEDCODE, 
+      BELONG_CHAN, SITE_ID, CREATE_USER, 
+      CREATE_TIME, AUDIT_STATUS, AUTHOR, 
+      ISSUER, ARTICLE_CONTENT_ID)
+    values (#{articleId,jdbcType=BIGINT}, #{upsubhead,jdbcType=NVARCHAR}, #{downsubhead,jdbcType=NVARCHAR}, 
+      #{newssubhead,jdbcType=NVARCHAR}, #{publishdate,jdbcType=TIMESTAMP}, #{informationsource,jdbcType=NVARCHAR}, 
+      #{simpleintroduce,jdbcType=NVARCHAR}, #{keywords,jdbcType=NVARCHAR}, #{image,jdbcType=NVARCHAR}, 
+      #{isopenlink,jdbcType=INTEGER}, #{linkaddress,jdbcType=NVARCHAR}, #{isstick,jdbcType=INTEGER}, 
+      #{isrecommend,jdbcType=INTEGER}, #{refusecopy,jdbcType=INTEGER}, #{sortedcode,jdbcType=INTEGER}, 
+      #{belongChan,jdbcType=BIGINT}, #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{auditStatus,jdbcType=INTEGER}, #{author,jdbcType=NVARCHAR}, 
+      #{issuer,jdbcType=NVARCHAR}, #{articleContentId,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Article">
+    insert into T_CMS_ARTICLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        ARTICLE_ID,
+      </if>
+      <if test="upsubhead != null">
+        UPSUBHEAD,
+      </if>
+      <if test="downsubhead != null">
+        DOWNSUBHEAD,
+      </if>
+      <if test="newssubhead != null">
+        NEWSSUBHEAD,
+      </if>
+      <if test="publishdate != null">
+        PUBLISHDATE,
+      </if>
+      <if test="informationsource != null">
+        INFORMATIONSOURCE,
+      </if>
+      <if test="simpleintroduce != null">
+        SIMPLEINTRODUCE,
+      </if>
+      <if test="keywords != null">
+        KEYWORDS,
+      </if>
+      <if test="image != null">
+        IMAGE,
+      </if>
+      <if test="isopenlink != null">
+        ISOPENLINK,
+      </if>
+      <if test="linkaddress != null">
+        LINKADDRESS,
+      </if>
+      <if test="isstick != null">
+        ISSTICK,
+      </if>
+      <if test="isrecommend != null">
+        ISRECOMMEND,
+      </if>
+      <if test="refusecopy != null">
+        REFUSECOPY,
+      </if>
+      <if test="sortedcode != null">
+        SORTEDCODE,
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="auditStatus != null">
+        AUDIT_STATUS,
+      </if>
+      <if test="author != null">
+        AUTHOR,
+      </if>
+      <if test="issuer != null">
+        ISSUER,
+      </if>
+      <if test="articleContentId != null">
+        ARTICLE_CONTENT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="articleId != null">
+        #{articleId,jdbcType=BIGINT},
+      </if>
+      <if test="upsubhead != null">
+        #{upsubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="downsubhead != null">
+        #{downsubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="newssubhead != null">
+        #{newssubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="publishdate != null">
+        #{publishdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="informationsource != null">
+        #{informationsource,jdbcType=NVARCHAR},
+      </if>
+      <if test="simpleintroduce != null">
+        #{simpleintroduce,jdbcType=NVARCHAR},
+      </if>
+      <if test="keywords != null">
+        #{keywords,jdbcType=NVARCHAR},
+      </if>
+      <if test="image != null">
+        #{image,jdbcType=NVARCHAR},
+      </if>
+      <if test="isopenlink != null">
+        #{isopenlink,jdbcType=INTEGER},
+      </if>
+      <if test="linkaddress != null">
+        #{linkaddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="isstick != null">
+        #{isstick,jdbcType=INTEGER},
+      </if>
+      <if test="isrecommend != null">
+        #{isrecommend,jdbcType=INTEGER},
+      </if>
+      <if test="refusecopy != null">
+        #{refusecopy,jdbcType=INTEGER},
+      </if>
+      <if test="sortedcode != null">
+        #{sortedcode,jdbcType=INTEGER},
+      </if>
+      <if test="belongChan != null">
+        #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=NVARCHAR},
+      </if>
+      <if test="issuer != null">
+        #{issuer,jdbcType=NVARCHAR},
+      </if>
+      <if test="articleContentId != null">
+        #{articleContentId,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Article">
+    update T_CMS_ARTICLE
+    <set>
+      <if test="upsubhead != null">
+        UPSUBHEAD = #{upsubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="downsubhead != null">
+        DOWNSUBHEAD = #{downsubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="newssubhead != null">
+        NEWSSUBHEAD = #{newssubhead,jdbcType=NVARCHAR},
+      </if>
+      <if test="publishdate != null">
+        PUBLISHDATE = #{publishdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="informationsource != null">
+        INFORMATIONSOURCE = #{informationsource,jdbcType=NVARCHAR},
+      </if>
+      <if test="simpleintroduce != null">
+        SIMPLEINTRODUCE = #{simpleintroduce,jdbcType=NVARCHAR},
+      </if>
+      <if test="keywords != null">
+        KEYWORDS = #{keywords,jdbcType=NVARCHAR},
+      </if>
+      <if test="image != null">
+        IMAGE = #{image,jdbcType=NVARCHAR},
+      </if>
+      <if test="isopenlink != null">
+        ISOPENLINK = #{isopenlink,jdbcType=INTEGER},
+      </if>
+      <if test="linkaddress != null">
+        LINKADDRESS = #{linkaddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="isstick != null">
+        ISSTICK = #{isstick,jdbcType=INTEGER},
+      </if>
+      <if test="isrecommend != null">
+        ISRECOMMEND = #{isrecommend,jdbcType=INTEGER},
+      </if>
+      <if test="refusecopy != null">
+        REFUSECOPY = #{refusecopy,jdbcType=INTEGER},
+      </if>
+      <if test="sortedcode != null">
+        SORTEDCODE = #{sortedcode,jdbcType=INTEGER},
+      </if>
+      <if test="belongChan != null">
+        BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null">
+        AUDIT_STATUS = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        AUTHOR = #{author,jdbcType=NVARCHAR},
+      </if>
+      <if test="issuer != null">
+        ISSUER = #{issuer,jdbcType=NVARCHAR},
+      </if>
+      <if test="articleContentId != null">
+        ARTICLE_CONTENT_ID = #{articleContentId,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="net.minggao.cms.model.Article">
+    update T_CMS_ARTICLE
+    set UPSUBHEAD = #{upsubhead,jdbcType=NVARCHAR},
+      DOWNSUBHEAD = #{downsubhead,jdbcType=NVARCHAR},
+      NEWSSUBHEAD = #{newssubhead,jdbcType=NVARCHAR},
+      PUBLISHDATE = #{publishdate,jdbcType=TIMESTAMP},
+      INFORMATIONSOURCE = #{informationsource,jdbcType=NVARCHAR},
+      SIMPLEINTRODUCE = #{simpleintroduce,jdbcType=NVARCHAR},
+      KEYWORDS = #{keywords,jdbcType=NVARCHAR},
+      IMAGE = #{image,jdbcType=NVARCHAR},
+      ISOPENLINK = #{isopenlink,jdbcType=INTEGER},
+      LINKADDRESS = #{linkaddress,jdbcType=NVARCHAR},
+      ISSTICK = #{isstick,jdbcType=INTEGER},
+      ISRECOMMEND = #{isrecommend,jdbcType=INTEGER},
+      REFUSECOPY = #{refusecopy,jdbcType=INTEGER},
+      SORTEDCODE = #{sortedcode,jdbcType=INTEGER},
+      BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      AUDIT_STATUS = #{auditStatus,jdbcType=INTEGER},
+      AUTHOR = #{author,jdbcType=NVARCHAR},
+      ISSUER = #{issuer,jdbcType=NVARCHAR},
+      ARTICLE_CONTENT_ID = #{articleContentId,jdbcType=LONGVARCHAR}
+    where ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.Article">
+    update T_CMS_ARTICLE
+    set UPSUBHEAD = #{upsubhead,jdbcType=NVARCHAR},
+      DOWNSUBHEAD = #{downsubhead,jdbcType=NVARCHAR},
+      NEWSSUBHEAD = #{newssubhead,jdbcType=NVARCHAR},
+      PUBLISHDATE = #{publishdate,jdbcType=TIMESTAMP},
+      INFORMATIONSOURCE = #{informationsource,jdbcType=NVARCHAR},
+      SIMPLEINTRODUCE = #{simpleintroduce,jdbcType=NVARCHAR},
+      KEYWORDS = #{keywords,jdbcType=NVARCHAR},
+      IMAGE = #{image,jdbcType=NVARCHAR},
+      ISOPENLINK = #{isopenlink,jdbcType=INTEGER},
+      LINKADDRESS = #{linkaddress,jdbcType=NVARCHAR},
+      ISSTICK = #{isstick,jdbcType=INTEGER},
+      ISRECOMMEND = #{isrecommend,jdbcType=INTEGER},
+      REFUSECOPY = #{refusecopy,jdbcType=INTEGER},
+      SORTEDCODE = #{sortedcode,jdbcType=INTEGER},
+      BELONG_CHAN = #{belongChan,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      AUDIT_STATUS = #{auditStatus,jdbcType=INTEGER},
+      AUTHOR = #{author,jdbcType=NVARCHAR},
+      ISSUER = #{issuer,jdbcType=NVARCHAR}
+    where ARTICLE_ID = #{articleId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.User">
+    <id column="USER_ID" jdbcType="BIGINT" property="userId" />
+    <result column="USERNAME" jdbcType="NVARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="NVARCHAR" property="password" />
+    <result column="UP_USERID" jdbcType="BIGINT" property="upUserid" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UP_USERNAME" jdbcType="NVARCHAR" property="upUsername" />
+    <result column="USER_STATUS" jdbcType="INTEGER" property="userStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID, USERNAME, PASSWORD, UP_USERID, SITE_ID, CREATE_USER, CREATE_TIME, UP_USERNAME, 
+    USER_STATUS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_USER
+    where USER_ID = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USER
+    where USERNAME = #{username}
+  </select>
+  <select id="selectAll" parameterType="net.minggao.cms.model.User" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_USER
+    where 1=1 and USERNAME != 'admin'
+    <if test="username != null">
+      AND  USERNAME like '%${username}%'
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_USER
+    where USER_ID = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.User">
+    insert into T_CMS_USER (USER_ID, USERNAME, PASSWORD, 
+      UP_USERID, SITE_ID, CREATE_USER, 
+      CREATE_TIME, UP_USERNAME, USER_STATUS
+      )
+    values (#{userId,jdbcType=BIGINT}, #{username,jdbcType=NVARCHAR}, #{password,jdbcType=NVARCHAR}, 
+      #{upUserid,jdbcType=BIGINT}, #{siteId,jdbcType=BIGINT}, #{createUser,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{upUsername,jdbcType=NVARCHAR}, #{userStatus,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.User">
+    insert into T_CMS_USER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="username != null">
+        USERNAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="upUserid != null">
+        UP_USERID,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="upUsername != null">
+        UP_USERNAME,
+      </if>
+      <if test="userStatus != null">
+        USER_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=NVARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=NVARCHAR},
+      </if>
+      <if test="upUserid != null">
+        #{upUserid,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upUsername != null">
+        #{upUsername,jdbcType=NVARCHAR},
+      </if>
+      <if test="userStatus != null">
+        #{userStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.User">
+    update T_CMS_USER
+    <set>
+      <if test="username != null">
+        USERNAME = #{username,jdbcType=NVARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=NVARCHAR},
+      </if>
+      <if test="upUserid != null">
+        UP_USERID = #{upUserid,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="upUsername != null">
+        UP_USERNAME = #{upUsername,jdbcType=NVARCHAR},
+      </if>
+      <if test="userStatus != null">
+        USER_STATUS = #{userStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.User">
+    update T_CMS_USER
+    set USERNAME = #{username,jdbcType=NVARCHAR},
+      PASSWORD = #{password,jdbcType=NVARCHAR},
+      UP_USERID = #{upUserid,jdbcType=BIGINT},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UP_USERNAME = #{upUsername,jdbcType=NVARCHAR},
+      USER_STATUS = #{userStatus,jdbcType=INTEGER}
+    where USER_ID = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.FriendlyLinkMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.FriendlyLink">
+    <id column="LINK_ID" jdbcType="BIGINT" property="linkId" />
+    <result column="LINKADDRESS" jdbcType="NVARCHAR" property="linkaddress" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="FRLINK_ID" jdbcType="INTEGER" property="frlinkId" />
+    <result column="LINKNAME" jdbcType="NVARCHAR" property="linkname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    LINK_ID, LINKADDRESS, SITE_ID, CREATE_USER, CREATE_TIME, FRLINK_ID, LINKNAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_FRIENDLYLINK
+    where LINK_ID = #{linkId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_FRIENDLYLINK
+    where LINKNAME = '${name}'
+  </select>
+
+  <select id="getFrilinkList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_FRIENDLYLINK
+    where FRLINK_ID = #{frlinkId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_FRIENDLYLINK
+    where LINK_ID = #{linkId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.FriendlyLink">
+    insert into T_CMS_FRIENDLYLINK (LINK_ID, LINKADDRESS, SITE_ID, 
+      CREATE_USER, CREATE_TIME, FRLINK_ID, 
+      LINKNAME)
+    values (#{linkId,jdbcType=BIGINT}, #{linkaddress,jdbcType=NVARCHAR}, #{siteId,jdbcType=BIGINT}, 
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{frlinkId,jdbcType=INTEGER}, 
+      #{linkname,jdbcType=NVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.FriendlyLink">
+    insert into T_CMS_FRIENDLYLINK
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="linkId != null">
+        LINK_ID,
+      </if>
+      <if test="linkaddress != null">
+        LINKADDRESS,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="frlinkId != null">
+        FRLINK_ID,
+      </if>
+      <if test="linkname != null">
+        LINKNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="linkId != null">
+        #{linkId,jdbcType=BIGINT},
+      </if>
+      <if test="linkaddress != null">
+        #{linkaddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frlinkId != null">
+        #{frlinkId,jdbcType=INTEGER},
+      </if>
+      <if test="linkname != null">
+        #{linkname,jdbcType=NVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.FriendlyLink">
+    update T_CMS_FRIENDLYLINK
+    <set>
+      <if test="linkaddress != null">
+        LINKADDRESS = #{linkaddress,jdbcType=NVARCHAR},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frlinkId != null">
+        FRLINK_ID = #{frlinkId,jdbcType=INTEGER},
+      </if>
+      <if test="linkname != null">
+        LINKNAME = #{linkname,jdbcType=NVARCHAR},
+      </if>
+    </set>
+    where LINK_ID = #{linkId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.FriendlyLink">
+    update T_CMS_FRIENDLYLINK
+    set LINKADDRESS = #{linkaddress,jdbcType=NVARCHAR},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      FRLINK_ID = #{frlinkId,jdbcType=INTEGER},
+      LINKNAME = #{linkname,jdbcType=NVARCHAR}
+    where LINK_ID = #{linkId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.minggao.cms.dao.ProcessMapper">
+  <resultMap id="BaseResultMap" type="net.minggao.cms.model.Process">
+    <id column="PROCESS_ID" jdbcType="BIGINT" property="processId" />
+    <result column="PROCESS_NAME" jdbcType="VARCHAR" property="processName" />
+    <result column="SITE_ID" jdbcType="BIGINT" property="siteId" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    PROCESS_ID, PROCESS_NAME, SITE_ID, CREATE_USER, CREATE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESS
+    where PROCESS_ID = #{processId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESS
+    where PROCESS_NAME = '${name}'
+  </select>
+
+  <select id="selectAll" parameterType="net.minggao.cms.model.Process" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_CMS_PROCESS
+    WHERE 1=1
+    <if test="processName != null">
+      AND  PROCESS_NAME like '%${processName}%'
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from T_CMS_PROCESS
+    where PROCESS_ID = #{processId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.minggao.cms.model.Process">
+    insert into T_CMS_PROCESS (PROCESS_ID, PROCESS_NAME, SITE_ID, 
+      CREATE_USER, CREATE_TIME)
+    values (#{processId,jdbcType=BIGINT}, #{processName,jdbcType=VARCHAR}, #{siteId,jdbcType=BIGINT}, 
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="net.minggao.cms.model.Process">
+    insert into T_CMS_PROCESS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="processId != null">
+        PROCESS_ID,
+      </if>
+      <if test="processName != null">
+        PROCESS_NAME,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="processId != null">
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="processName != null">
+        #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.minggao.cms.model.Process">
+    update T_CMS_PROCESS
+    <set>
+      <if test="processName != null">
+        PROCESS_NAME = #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null">
+        SITE_ID = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where PROCESS_ID = #{processId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.minggao.cms.model.Process">
+    update T_CMS_PROCESS
+    set PROCESS_NAME = #{processName,jdbcType=VARCHAR},
+      SITE_ID = #{siteId,jdbcType=BIGINT},
+      CREATE_USER = #{createUser,jdbcType=BIGINT},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+    where PROCESS_ID = #{processId,jdbcType=BIGINT}
+  </update>
+</mapper>
